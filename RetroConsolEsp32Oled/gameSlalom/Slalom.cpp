@@ -4,6 +4,18 @@
 
 namespace SlalomGame {
 
+  // Local constants within namespace
+  const int sprite_width = 28;
+  const int sprite_height = 10;
+  const int bike_width = 36;
+  const int bike_height = 22;
+  const int f1_width = 18;
+  const int f1_height = 18;
+  const int FuelInit = 30;
+  const int LivesInit = 3;
+  const int DelayFramesInit = 600;
+  const int IncreaseFuel = 30;
+
   SpriteCode NewRow_Array[4] = {FUEL,FUEL,FUEL,FUEL};
   SpriteCode Sprites_Array[6][4] = {{CLEAN, CLEAN, CLEAN, CLEAN}, 
                                     {CLEAN, CLEAN, CLEAN, CLEAN},

@@ -203,7 +203,7 @@ namespace CymbergajGame {
   void DrawField() {
     myOLED.drawLine (4, 0, FieldXmax-5, 0, SH110X_WHITE);
     myOLED.drawLine (4, FieldYmax, FieldXmax-5, FieldYmax, SH110X_WHITE);
-    myOLED.drawLine (HalfFieldX, 0, HalfFieldX, FieldYmax-1, SH110X_WHITE); // linia srodkowa
+    myOLED.drawLine (HalfFieldX, 0, HalfFieldX, FieldYmax-1, SH110X_WHITE);
     myOLED.drawCircle ( HalfFieldX, HalfFieldY, 7, SH110X_WHITE );
   }
 

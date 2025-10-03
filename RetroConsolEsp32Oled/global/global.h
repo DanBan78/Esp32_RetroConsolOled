@@ -123,6 +123,7 @@ const char* const teksty[] PROGMEM = { str0, str1, str2, str3, str4, str5,
   void WelcomeScreen();
   void CheckIfResetHighscores();
   void DisplayHighscores();
+  int GameSelectMenu();
 
   bool checkForSleep();
   bool isSleeping();

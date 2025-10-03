@@ -5,16 +5,6 @@
 
     enum SpriteCode { CLEAN = 0,  GATE, OIL, FUEL, BIKE };
 
-	#define FuelInit 30
-	#define LivesInit 3
-	#define DelayFramesInit 600
-    #define IncreaseFuel 30
-	#define bike_width 36
-	#define bike_height 22
-
-	#define sprite_width 28
-	#define sprite_height 10
-
 	#define paliwo_width 10
 	#define paliwo_height 18
 

@@ -18,8 +18,8 @@ namespace CymbergajGame {
     enum aiLevel {Amator=1, Normalny, Geniusz};
 
     typedef struct cymBallStruct {
-      int x;  // wspolrzedna x pilki
-      int y;  // wspolrzedna y pilki
+      int x;
+      int y;
       int prevX;
       int prevY;
       unsigned long prevUpdateTime = 0;
@@ -30,7 +30,7 @@ namespace CymbergajGame {
     };
 
     typedef struct cymPlayerStruct {
-      int y;          //srodek paletkiY
+      int y;          //srodek paletki
       int score = 0;
     };
 

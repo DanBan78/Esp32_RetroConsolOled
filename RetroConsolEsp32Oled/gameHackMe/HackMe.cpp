@@ -280,8 +280,8 @@ bool SecondDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
       default:
         break;
     }
-    if (selectedRow != HackMeGame.SelectedRow) {
-      SelectRow_y(HackMeGame.SelectedRow, prevRow);
+    if ( HackMeGame.SelectedRow != selectedRow) {
+      SelectRow_y(HackMeGame.SelectedRow, selectedRow);
       selectedRow = HackMeGame.SelectedRow;
       myOLED.display();
     }
@@ -321,7 +321,7 @@ bool ThirdDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
         break;
     }
     if (selectedCol != HackMeGame.SelectedCol) {
-      SelectCol_x(HackMeGame.SelectedCol, prevCol);
+      SelectCol_x(HackMeGame.SelectedCol, selectedCol);
       selectedCol = HackMeGame.SelectedCol;
       myOLED.display();
     }
@@ -360,8 +360,8 @@ bool FourthDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
       default:
         break;
     }
-    if (selectedRow != HackMeGame.SelectedRow) {
-      SelectRow_y(HackMeGame.SelectedRow, prevRow);
+    if (HackMeGame.SelectedRow != selectedRow) {
+      SelectRow_y(HackMeGame.SelectedRow, selectedRow);
       selectedRow = HackMeGame.SelectedRow;
       myOLED.display();
     }
