@@ -98,7 +98,7 @@ namespace CymbergajGame {
         }
         if (IsPressed(DownLeft)) {
           LeftPlayer.y = LeftPlayer.y+CymGame.padleDeltaMoveY;
-          if ( LeftPlayer.y > PadleMaxY ) LeftPlayer.y = PadleMaxY;
+          if (LeftPlayer.y > PadleMaxY ) LeftPlayer.y = PadleMaxY;
         }
         if (!IsPressed(NONE)) CymGame.updateScreen = true;
       case 0:
@@ -113,16 +113,16 @@ namespace CymbergajGame {
     CheckIfBallHitBand(Ball);
     if (Ball.x < 3) {
       CheckIfLeftPlayerLostGoal(CymGame, Ball, LeftPlayer, RightPlayer);
-      if ( Ball.isHeading == toLeft ) Ball.isHeading = (direction)random(1,3);
-      if ( Ball.isHeading == toLeftUp ) Ball.isHeading = toRightUp;
-      if ( Ball.isHeading == toLeftDown ) Ball.isHeading = toRightDown;
+      if (Ball.isHeading == toLeft ) Ball.isHeading = (direction)random(1,3);
+      if (Ball.isHeading == toLeftUp ) Ball.isHeading = toRightUp;
+      if (Ball.isHeading == toLeftDown ) Ball.isHeading = toRightDown;
       Ball.x = 5; 
     }
     if (Ball.x >= FieldXmax-3) {
       CheckIfRightPlayerLostGoal(CymGame, Ball, LeftPlayer, RightPlayer);
-      if ( Ball.isHeading == toRight ) Ball.isHeading = (direction)random(4,6);
-      if ( Ball.isHeading == toRightUp ) Ball.isHeading = toLeftUp;
-      if ( Ball.isHeading == toRightDown ) Ball.isHeading = toLeftDown;
+      if (Ball.isHeading == toRight ) Ball.isHeading = (direction)random(4,6);
+      if (Ball.isHeading == toRightUp ) Ball.isHeading = toLeftUp;
+      if (Ball.isHeading == toRightDown ) Ball.isHeading = toLeftDown;
       Ball.x = FieldXmax-6;
     }
   }
@@ -204,7 +204,7 @@ namespace CymbergajGame {
     myOLED.drawLine (4, 0, FieldXmax-5, 0, SH110X_WHITE);
     myOLED.drawLine (4, FieldYmax, FieldXmax-5, FieldYmax, SH110X_WHITE);
     myOLED.drawLine (HalfFieldX, 0, HalfFieldX, FieldYmax-1, SH110X_WHITE);
-    myOLED.drawCircle ( HalfFieldX, HalfFieldY, 7, SH110X_WHITE );
+    myOLED.drawCircle (HalfFieldX, HalfFieldY, 7, SH110X_WHITE );
   }
 
   void UpdateBallPos(gameStruct& CymGame, cymBallStruct& Ball, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer) {
@@ -356,13 +356,13 @@ namespace CymbergajGame {
 
   void CheckIfBallHitBand(cymBallStruct& Ball) {
     if (Ball.y <=2) {
-      if ( Ball.isHeading == toLeftUp ) Ball.isHeading = toLeftDown;
-      if ( Ball.isHeading == toRightUp ) Ball.isHeading = toRightDown;
+      if (Ball.isHeading == toLeftUp ) Ball.isHeading = toLeftDown;
+      if (Ball.isHeading == toRightUp ) Ball.isHeading = toRightDown;
       Ball.y = 3;
     }
     if (Ball.y >= FieldYmax-2) {
-      if ( Ball.isHeading == toLeftDown ) Ball.isHeading = toLeftUp;
-      if ( Ball.isHeading == toRightDown ) Ball.isHeading = toRightUp;
+      if (Ball.isHeading == toLeftDown ) Ball.isHeading = toLeftUp;
+      if (Ball.isHeading == toRightDown ) Ball.isHeading = toRightUp;
       Ball.y = FieldYmax-4;
     }
   };

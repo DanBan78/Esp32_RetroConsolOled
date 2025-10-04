@@ -280,7 +280,7 @@ bool SecondDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
       default:
         break;
     }
-    if ( HackMeGame.SelectedRow != selectedRow) {
+    if (HackMeGame.SelectedRow != selectedRow) {
       SelectRow_y(HackMeGame.SelectedRow, selectedRow);
       selectedRow = HackMeGame.SelectedRow;
       myOLED.display();

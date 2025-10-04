@@ -124,7 +124,7 @@ void DisplayBallsOnScreen(BallLineStr allBallLines[4]) {
   } else delay(TON_Ball_CZAS);
 }
 
-void DrawBalls( BallLineStr& BallLine, uint16_t color){
+void DrawBalls(BallLineStr& BallLine, uint16_t color){
   for (int i=0; i<7; i++) {
     if ((BallLine.position & (1 << i)) != 0) {
       int x=0+i*5; 

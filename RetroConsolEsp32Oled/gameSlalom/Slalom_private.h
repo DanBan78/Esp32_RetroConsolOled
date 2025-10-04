@@ -3,7 +3,17 @@
 
     extern const GameInfo GameInfo_Slalom;
 
-    enum SpriteCode { CLEAN = 0,  GATE, OIL, FUEL, BIKE };
+    enum SpriteCode { CLEAN = 0,  GATE, OIL, FUEL, CAR };
+
+	#define FuelInit 30
+	#define LivesInit 3
+	#define DelayFramesInit 600
+    #define IncreaseFuel 30
+	#define f1_width 36
+	#define f1_height 22
+
+	#define sprite_width 28
+	#define Sprite_height 10
 
 	#define paliwo_width 10
 	#define paliwo_height 18
@@ -156,34 +166,36 @@ const unsigned char Wrak [] PROGMEM = {
 };
 
 namespace SlalomGame {
-	void PauseGame();
+	void Pause();
 	void DisplayInitTrack(uint8_t color);
 	void DisplaySprite(int row, int column, SpriteCode Sprite, uint8_t color);
 	void GetSprite_x_y(int row, int column, int *x, int *y);
-	void DisplayBike(int bike_x);
+	void DisplayCar(int car_x);
 	void DisplayRoad();
-	void DisplayLivesLeft(int k, uint8_t color);
-	void GameInitParams();
- 	void DisplayFuelLevel();
-	void DisplayInterLines();
+	void LivesLeftDisplay(int k, uint8_t color);
+	void GameSlalomInit();
+ 	void displayPoints();
+	void display_roadLine();
 	void UpdateRaceArray();
 	void NewRowFromCode(int Code);
-	void EraseBikeFromDisplay();
+	void EraseCarFromDisplay();
 	bool CheckIfNextFrame();
 	void RedrawScreen();
+	bool CheckIfRoadLanesSwitch();
 	void CheckIfColissionHappen();
 	void DisplayTankowanie();
+	void Poslizg();
 	void ColissionDetected();
 	void CleanRow5();
 	void ResetRaceArray();
 	void GenerateNextRow(SpriteCode Array[4]);
 	void CalculateGameSpeedAndLevel();
-	void CheckIfGameOver();
-	void HandleGameOver();
+	void checkIfGameOver();
+	void GameOverSlalomDisplay();
 	void AddFuelStation();
-	void WelcomeScreen();
+	void WelcomeSlalomScreen();
 	void DrawAddedFuelStation(uint8_t color);
-	bool CheckButtonsAndReturnBikeMovedStatus();
+	bool CheckButtonsSlalom();
 	bool CheckFuelBlink();
 }
 

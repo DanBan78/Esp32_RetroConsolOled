@@ -86,7 +86,7 @@ void DisplayFirstFrame(dGameStr& DinoGame, jumpStr& Dino, obstStr& Obst1, obstSt
   delay(500);
 }
 
-void UpdateGameFrame( dGameStr& DinoGame, jumpStr& Dino, birdStr& Bird, obstStr& Obst1, obstStr& Obst2, const GameConstStr& GameConst) {
+void UpdateGameFrame(dGameStr& DinoGame, jumpStr& Dino, birdStr& Bird, obstStr& Obst1, obstStr& Obst2, const GameConstStr& GameConst) {
   myOLED.clearDisplay();
   DisplayScore(DinoGame, Dino);
   DisplaySoundInfo(120, 0, SoundEnabled);
