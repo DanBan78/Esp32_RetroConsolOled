@@ -1,6 +1,8 @@
 #ifndef DINO_PRIVATE_LIB_H
 #define DINO_PRIVATE_LIB_H
 
+namespace DinoGame {
+
   enum birdState { BirdUp, BirdDown, BirdFall };
   #define OBST_NARROW false
   #define OBST_WIDE true
@@ -80,9 +82,8 @@
     uint8_t spriteSetIndex = 0;
   };
 
-namespace DinoGame {
   void Game_Dino();
-  bool ItsCollisionWithTree(dGameStr& DinoGame, jumpStr& Dino, obstStr& tree, const GameConstStr& GameConst);
+  bool CollisionWithTree(dGameStr& DinoGame, jumpStr& Dino, obstStr& tree, const GameConstStr& GameConst);
   void CheckButtons(dGameStr& DinoGame, jumpStr& Dino);
   void CalcBirdXYpos(dGameStr& DinoGame, birdStr& Bird, const GameConstStr& GameConst);
   void CalcGameSpeed(dGameStr& DinoGame, const GameConstStr& GameConst);
@@ -93,7 +94,7 @@ namespace DinoGame {
   void DisplayScore(dGameStr& DinoGame, jumpStr& Dino);
   void WelcomeScreen();
   void DisplayFirstFrame(dGameStr& DinoGame, jumpStr& Dino, obstStr& Obst1, obstStr& Obst2, const GameConstStr& GameConst);
-  void GameOverTreeColisionDetected(dGameStr& DinoGame,jumpStr& Dino, const GameConstStr& GameConst);
+  void GameOver(dGameStr& DinoGame,jumpStr& Dino, const GameConstStr& GameConst);
   void PauseGame(dGameStr& DinoGame);
   void InitParams(dGameStr& DinoGame, jumpStr& Dino, birdStr& Bird, obstStr& Obst1, obstStr& Obst2, const GameConstStr& GameConst);
   void HandleDinoJump(dGameStr& DinoGame, jumpStr& Dino, const GameConstStr& GameConst);

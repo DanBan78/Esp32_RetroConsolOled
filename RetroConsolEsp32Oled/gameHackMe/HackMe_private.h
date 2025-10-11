@@ -1,6 +1,8 @@
 #ifndef HACKME_PRIVATE_H
 #define HACKME_PRIVATE_H
 
+namespace HackMeGame {
+
   static const uint8_t ArrayMaxRowColIndex = 5;
   static const uint8_t timeForCodeBreaking = 25; // seconds for game
   static const uint8_t CodeWidth = 4;
@@ -72,7 +74,6 @@ const unsigned char WYBUCH [] PROGMEM = {
   0x00, 0x00, 0x00, 0x01, 0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfe, 0x00, 0x00, 0x00
 };
 
-namespace HackMeGame {
   bool TimeOutBombExplode(timerStruct& Timer1Sec);
   bool SelectedDigitIsWrong(gameStruct& Game);
   bool FirstDigitIsWrong(gameStruct& Game, timerStruct& Timer1Sec);
@@ -86,7 +87,7 @@ namespace HackMeGame {
   void DisplayResolution(gameStruct& Game);
   void ErrorSound();
   void GameRestart(gameStruct& HackMeGame);
-  void GenerateCode(gameStruct& Game, uint8_t ileZnakow);
+  void GenerateBombCode(gameStruct& Game, uint8_t ileZnakow);
   void GenerateRandomCodeMatrix(gameStruct& Game);
   void GenerateAndDisplayCodeMatrix(gameStruct& HackMeGame);
   void GameParams(gameStruct& HackMeGame, timerStruct& Timer1Sec);

@@ -87,7 +87,7 @@ void GameParams(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
 
 void DisplayMixedCodeAndStartCountingDown(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
     SelectFirstRowCol(HackMeGame);
-    GenerateCode(HackMeGame, CodeWidth);
+    GenerateBombCode(HackMeGame, CodeWidth);
     MixCode(HackMeGame, CodeWidth);
     MixedCodeDisplay(HackMeGame);
     delay(DELAY100MS);
@@ -148,7 +148,7 @@ void SelectCol_x(uint8_t SelectCol, uint8_t UnselectCol) {
   myOLED.fillRect(1+14*UnselectCol, 0, 9, 63, SH110X_INVERSE);
 }
 
-void GenerateCode(gameStruct& HackMeGame, uint8_t ileZnakow) {
+void GenerateBombCode(gameStruct& HackMeGame, uint8_t ileZnakow) {
   uint8_t indeks = 0;
   for (uint8_t znakIndex=0; znakIndex < ileZnakow; znakIndex++) {
     bool done = false;

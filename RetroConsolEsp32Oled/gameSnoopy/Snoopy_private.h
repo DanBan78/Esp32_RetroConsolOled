@@ -1,7 +1,10 @@
 #ifndef SNOOPY_PRIVATE_H
 #define SNOOPY_PRIVATE_H
 
-	extern const GameInfo GameInfo_Snoopy;
+extern const GameInfo GameInfo_Snoopy;
+	
+namespace SnoopyGame {
+
 	enum orientation { sLeftUp = 0, sLeftDown = 1, sRightUp = 2, sRightDown = 3, sResting = 4, sWaiting = 5 };
 
 	#define Ball_DIMENSION 3
@@ -19,16 +22,13 @@
 		unsigned long initFrameUpdateRate = 300;
 		unsigned long frameUpdateRate = 500;
 	};
-
-	//void Game_Snoopy();
-namespace SnoopyGame {
-
+	
 	bool ItsTimeToMoveBall(snoopyStr& Snoopy);
 	void SnoopyInit(snoopyStr& Snoopy, BallLineStr allBallLines[4]);
     void DrawBalls(BallLineStr& BallLine, uint16_t color);
 	void CheckIfBallDropped(snoopyStr& Snoopy, BallLineStr allBallLines[4]);
-	void DisplayGameOverSnoopy(snoopyStr& Snoopy);
-	void SnoopyDisplayScore(snoopyStr& Snoopy);
+	void DisplayGameOver(snoopyStr& Snoopy);
+	void DisplayScore(snoopyStr& Snoopy);
 	void DrawSnoopy(orientation Pos, uint16_t color);
 	void CheckIfSnopyMoved(snoopyStr& Snoopy);
 	void DisplayBrokenBall(snoopyStr& Snoopy, orientation pos);

@@ -80,7 +80,7 @@ namespace CymbergajGame {
   void CheckIfLeftPlayerLostGoal(gameStruct& Game, cymBallStruct& Ball, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer);
   void CheckIfRightPlayerLostGoal(gameStruct& Game, cymBallStruct& Ball, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer);
   void InitParams(gameStruct& Game, cymBallStruct& Ball, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer);
-  void ParamsUpdateFromUserMenu(cymMenuStruct& Menu, gameStruct& Game);
+  void UserMenuParamsUpdate(cymMenuStruct& Menu, gameStruct& Game);
   void DisplayGameSummary(gameStruct& Game, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer);
   void DisplayGoal(gameStruct& Game, cymBallStruct& Ball, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer);
   void DisplayScore(gameStruct& Game, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer);

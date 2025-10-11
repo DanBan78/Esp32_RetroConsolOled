@@ -4,6 +4,7 @@
 #include "gameDino/Dino.cpp"
 #include "gameHackMe/HackMe.cpp"
 #include "gameSnoopy/Snoopy.cpp"
+#include "gameStriker/Striker.cpp"
 
 
 Adafruit_SH1106G myOLED = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);

@@ -257,7 +257,7 @@ namespace CymbergajGame {
           Menu.rowOptionSelect[SelectedRow] = SelectedRowOption;
         break;
         case DownRight:
-          ParamsUpdateFromUserMenu(Menu, CymGame);
+          UserMenuParamsUpdate(Menu, CymGame);
           WaitForButtonRelease();
         return;
       }
@@ -284,7 +284,7 @@ namespace CymbergajGame {
     }
   }
 
-  void ParamsUpdateFromUserMenu(cymMenuStruct& Menu, gameStruct& CymGame) {
+  void UserMenuParamsUpdate(cymMenuStruct& Menu, gameStruct& CymGame) {
     CymGame.playersNo = Menu.menuOptionValue[0][Menu.rowOptionSelect[0]-1];
     CymGame.difficulty = (level)Menu.menuOptionValue[1][Menu.rowOptionSelect[1]-1];
     CymGame.aiLevel = Menu.menuOptionValue[2][Menu.rowOptionSelect[2]-1];

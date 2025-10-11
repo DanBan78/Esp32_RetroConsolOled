@@ -118,8 +118,8 @@ void GameLoop(dGameStr& DinoGame, jumpStr& Dino, birdStr& Bird, obstStr& Obst1, 
     CalcTreesXpos(DinoGame, Obst1, Obst2, GameConst);
     CalcBirdXYpos(DinoGame, Bird, GameConst);
     CalcGameSpeed(DinoGame, GameConst);
-    if (ItsCollisionWithTree(DinoGame, Dino, Obst1, GameConst) || ItsCollisionWithTree(DinoGame, Dino, Obst2, GameConst)) {
-      GameOverTreeColisionDetected(DinoGame, Dino, GameConst);
+    if (CollisionWithTree(DinoGame, Dino, Obst1, GameConst) || CollisionWithTree(DinoGame, Dino, Obst2, GameConst)) {
+      GameOver(DinoGame, Dino, GameConst);
       myOLED.display();
       delay(50);
       return;
@@ -216,7 +216,7 @@ void MoveAndDisplayTree(dGameStr& DinoGame, obstStr& tree, const GameConstStr& G
   }
 }
 
-void GameOverTreeColisionDetected(dGameStr& DinoGame, jumpStr& Dino, const GameConstStr& GameConst) {
+void GameOver(dGameStr& DinoGame, jumpStr& Dino, const GameConstStr& GameConst) {
   myOLED.setTextSize(1);
   myOLED.setCursor((GameConst.jumper_baseX + GameConst.jumper_width + 4), Dino.y-4);
   myOLED.println(Skins[DinoGame.spriteSetIndex].collisionText);
@@ -289,7 +289,7 @@ void HandleDinoJump(dGameStr& DinoGame, jumpStr& Dino, const GameConstStr& GameC
 }
 
 
-bool ItsCollisionWithTree(dGameStr& DinoGame, jumpStr& Dino, obstStr& tree, const GameConstStr& GameConst) {
+bool CollisionWithTree(dGameStr& DinoGame, jumpStr& Dino, obstStr& tree, const GameConstStr& GameConst) {
   int dinoCenter        = GameConst.jumper_baseX + GameConst.jumper_width/2;
   int dinoColAreaStart  = dinoCenter - GameConst.jumper_xColRange;
   int dinoColAreaWidth  = 2 * GameConst.jumper_xColRange;

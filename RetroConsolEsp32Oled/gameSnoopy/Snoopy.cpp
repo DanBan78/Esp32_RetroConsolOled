@@ -28,7 +28,7 @@ void Game_Snoopy() {
           }
         }
       }
-      SnoopyDisplayScore(Snoopy);
+      DisplayScore(Snoopy);
       CheckIfSnopyMoved(Snoopy);
       myOLED.display();
     }
@@ -96,7 +96,7 @@ void DrawSnoopy(orientation Pos, uint16_t color) {
   }
 }
 
-void SnoopyDisplayScore(snoopyStr& Snoopy) {
+void DisplayScore(snoopyStr& Snoopy) {
   myOLED.fillRect(0, 0, 60,12, SH110X_BLACK);
   myOLED.setTextColor(SH110X_WHITE);
   myOLED.setTextSize(1);
@@ -175,7 +175,7 @@ void SnoopyInit(snoopyStr& Snoopy, BallLineStr allBallLines[4]) {
   Score = 0;
   Snoopy.direction = sResting;
   Snoopy.frameUpdateRate = Snoopy.initFrameUpdateRate;
-  SnoopyDisplayScore(Snoopy);
+  DisplayScore(Snoopy);
   DrawSnoopy(Snoopy.direction, SH110X_WHITE);
 
   ClearBallLines(allBallLines);
@@ -204,7 +204,7 @@ void CheckIfBallDropped(snoopyStr& Snoopy, BallLineStr allBallLines[4]) {
         DisplayBrokenBall(Snoopy, allBallLines[i].direction);
 
         if (Snoopy.lives == 0) {
-          DisplayGameOverSnoopy(Snoopy);
+          DisplayGameOver(Snoopy);
           WaitForAnyButtonToContinue();
         }
         ClearBallLines(allBallLines);
@@ -275,7 +275,7 @@ bool NewBallIsRequired(snoopyStr& Snoopy, BallLineStr allBallLines[4]) {
   return false;
 }
 
-void DisplayGameOverSnoopy(snoopyStr& Snoopy) {
+void DisplayGameOver(snoopyStr& Snoopy) {
   // Aktualizuj session score
   if (Score > Snoopy.sesionScore) {
     Snoopy.sesionScore = Score;
