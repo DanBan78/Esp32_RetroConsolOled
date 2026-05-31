@@ -9,6 +9,8 @@ namespace HackMeGame {
   static const char* CodeString = "|CODE|";
   static const char CodeChars[12] = {'@','#','$','%','&','*','+','/','?','!','o', '\\'};
 
+  enum DigitAxis { AXIS_COL, AXIS_ROW };
+
   typedef struct matchCodeStruct {
     uint8_t CodeSignsCodesIndex;
     bool matched;
@@ -76,10 +78,7 @@ const unsigned char WYBUCH [] PROGMEM = {
 
   bool TimeOutBombExplode(timerStruct& Timer1Sec);
   bool SelectedDigitIsWrong(gameStruct& Game);
-  bool FirstDigitIsWrong(gameStruct& Game, timerStruct& Timer1Sec);
-  bool FourthDigitIsWrong(gameStruct& Game, timerStruct& Timer1Sec);
-  bool SecondDigitIsWrong(gameStruct& Game, timerStruct& Timer1Sec);
-  bool ThirdDigitIsWrong(gameStruct& Game, timerStruct& Timer1Sec);
+  bool DigitIsWrong(gameStruct& Game, timerStruct& Timer1Sec, DigitAxis axis, bool requireMove);
   void CodeResolved();
   void DisplayExplosion();
   void DisplayCodeMatrix(gameStruct& Game);

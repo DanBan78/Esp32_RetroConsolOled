@@ -16,29 +16,16 @@ namespace SlalomGame {
 
   const int sprite_x[5][4] = {{23,42,61,80},{20,41,62,83},{17,40,63,86},{14,39,64,89},{4,34,63,92}};
   const int sprite_y[5] = {-4,4,13,27,40};
-  int LivesLeft;
-  int GameLevel = 0;
-  int FuelLevel = FuelInit;
-  bool LineSwitch = false;
-  bool GameOverSlalom = false;
-  bool ButtonPressed = false;
-  unsigned long LastTime;
-  unsigned long LastTime2;
-  unsigned long LastFuelBlinkTime;
-  bool FuelBlinkState = false;
-  bool Wyciekoleju = false;
-  int colissionsCount = 0;
-  int OldScoreForLivesAdding =0;
-  int FrameDelay = DelayFramesInit; //odstep w ms pomiedzy klatkami
-  int car_x = 0; // car position
-  int SlalomSesionScore = 0;
+
+  // Caly stan rozgrywki w jednej strukturze (zgrupowany, jak w innych grach).
+  SlalomState S;
 
   void display_roadLine() {
-    LineSwitch = !LineSwitch;
+    S.LineSwitch = !S.LineSwitch;
 	    myOLED.drawLine(95,64, 83, 0, SH110X_BLACK);
       myOLED.drawLine(64,0, 64, 64, SH110X_BLACK);
       myOLED.drawLine(33,64, 45, 0, SH110X_BLACK);
-    if (LineSwitch) {
+    if (S.LineSwitch) {
       myOLED.drawLine(92,48, 89, 32, SH110X_WHITE);
       myOLED.drawLine(86,16, 83, 0, SH110X_WHITE);
 
@@ -50,7 +37,7 @@ namespace SlalomGame {
       myOLED.drawLine(33,64, 36, 48, SH110X_WHITE);
       myOLED.drawLine(39,32, 42, 16, SH110X_WHITE); 
     }
-    if (!LineSwitch) {
+    if (!S.LineSwitch) {
       myOLED.drawLine(95,64, 92, 48, SH110X_WHITE);
       myOLED.drawLine(89,32, 86, 16, SH110X_WHITE); 
 
@@ -65,7 +52,6 @@ namespace SlalomGame {
   }
   
   void LivesLeftDisplay(int k, uint8_t color) {
-    //myOLED.fillRect(114, 0, 128, 12, SH110X_BLACK);
     myOLED.drawBitmap(120, 1, live_yes, 5, 6, SH110X_WHITE);
     myOLED.setTextColor(color);
     myOLED.setCursor(113,0);
@@ -73,15 +59,15 @@ namespace SlalomGame {
   }
 
   void GameSlalomInit() {
-    LivesLeft = LivesInit;
-    FuelLevel = FuelInit;
-    GameLevel = 0;
-    car_x = random(1,5);
+    S.LivesLeft = LivesInit;
+    S.FuelLevel = FuelInit;
+    S.GameLevel = 0;
+    S.car_x = random(1,5);
     Score = 0;
-    FrameDelay = DelayFramesInit;
-    OldScoreForLivesAdding =0;
-    LastFuelBlinkTime = millis();
-    FuelBlinkState = false;
+    S.FrameDelay = DelayFramesInit;
+    S.OldScoreForLivesAdding =0;
+    S.LastFuelBlinkTime = millis();
+    S.FuelBlinkState = false;
 
     for (int i = 0; i<6; i++) {
       for (int j = 0; j<4;j++) {
@@ -93,7 +79,7 @@ namespace SlalomGame {
     DisplayInitTrack(SH110X_WHITE);
     displayPoints();
     display_roadLine();
-    LivesLeftDisplay(LivesLeft, SH110X_WHITE);
+    LivesLeftDisplay(S.LivesLeft, SH110X_WHITE);
   }
 
   void DisplayInitTrack(uint8_t color) {
@@ -179,14 +165,13 @@ namespace SlalomGame {
   }
 
   bool CheckFuelBlink() {
-    if (FuelLevel <= 14) {
-      if (millis() - LastFuelBlinkTime > 300) { // Miga co 300ms
-        LastFuelBlinkTime = millis();
-        FuelBlinkState = !FuelBlinkState;
+    if (S.FuelLevel <= 14) {
+      if (TimerElapsed(S.LastFuelBlinkTime, 300)) { // Miga co 300ms
+        S.FuelBlinkState = !S.FuelBlinkState;
         return true;
       }
     } else {
-      FuelBlinkState = false; // Zawsze widoczny gdy fuel > 14
+      S.FuelBlinkState = false; // Zawsze widoczny gdy fuel > 14
     }
     return false;
   }
@@ -201,24 +186,22 @@ namespace SlalomGame {
     myOLED.setTextColor(SH110X_BLACK);
     myOLED.setCursor(0,0);
     myOLED.print("F");
-    myOLED.print(FuelLevel+1);
+    myOLED.print(S.FuelLevel+1);
     
     // Wyświetl nowy tekst tylko jeśli powinien być widoczny
-    if (FuelLevel > 14 || FuelBlinkState) {
+    if (S.FuelLevel > 14 || S.FuelBlinkState) {
       myOLED.setTextColor(SH110X_WHITE);
       myOLED.setCursor(0,0);
       myOLED.print("F");
-      myOLED.print(FuelLevel);
+      myOLED.print(S.FuelLevel);
     }
   }
 
   void RedrawScreen() {
-    //myOLED.clearDisplay();
     display_roadLine();
     DisplayInitTrack(SH110X_BLACK);
 
     UpdateRaceArray();
-    //DisplayRoad();
     DisplayInitTrack(SH110X_WHITE);
   }
 
@@ -256,7 +239,7 @@ namespace SlalomGame {
   void GenerateNextRow(SpriteCode Array[4]) {
     int KodWiersza;
     int LosLevelRow;
-    switch (GameLevel) {
+    switch (S.GameLevel) {
       case(0):
         //jedno auto na wiersz
         KodWiersza = random(0,4);
@@ -289,34 +272,26 @@ namespace SlalomGame {
   }
 
   bool CheckIfNextFrame() {
-    if (millis()-LastTime > (FrameDelay)) {
-        LastTime  = millis();
-        return true;
-    }
-    return false;
+    return TimerElapsed(S.LastTime, S.FrameDelay);
   }
 
   bool CheckIfRoadLanesSwitch() {
-    if (millis()-LastTime2 > (FrameDelay)) {
-      LastTime2  = millis();
-      return true;
-    }
-    return false;
+    return TimerElapsed(S.LastTime2, S.FrameDelay);
   }
 
   void CheckIfColissionHappen() {
-    switch(Sprites_Array[4][car_x-1]) {
+    switch(Sprites_Array[4][S.car_x-1]) {
       case(CLEAN):
         if (SoundEnabled) MyTune(TON_RAMKA_FREQ,30);
         Score++;
-        FuelLevel--;
+        S.FuelLevel--;
         break;
       case(GATE):
         if (SoundEnabled) MyTune(TON_ODLICZANIE_FREQ,30);
-        FuelLevel--;
-        LivesLeftDisplay(LivesLeft, SH110X_BLACK);
-        LivesLeft--;
-        LivesLeftDisplay(LivesLeft, SH110X_WHITE);
+        S.FuelLevel--;
+        LivesLeftDisplay(S.LivesLeft, SH110X_BLACK);
+        S.LivesLeft--;
+        LivesLeftDisplay(S.LivesLeft, SH110X_WHITE);
         ColissionDetected();
         break;
       case (FUEL):
@@ -328,9 +303,9 @@ namespace SlalomGame {
   }
 
   void DisplayTankowanie() {
-    DisplayCar(car_x);
+    DisplayCar(S.car_x);
     myOLED.drawBitmap(117, 30, f1_tanking, 18, 18, SH110X_WHITE);
-    for (int i = FuelLevel; i < FuelLevel +1+ IncreaseFuel; i++) {
+    for (int i = S.FuelLevel; i < S.FuelLevel +1+ IncreaseFuel; i++) {
       if (SoundEnabled) MyTune(TON_KONIECGRY_FREQ+i, 4);
 
       myOLED.setTextColor(SH110X_WHITE);
@@ -347,8 +322,8 @@ namespace SlalomGame {
     }
     myOLED.setTextColor(SH110X_WHITE);
     myOLED.drawBitmap(117, 30, f1_tanking, 18, 18, SH110X_BLACK);
-    FuelLevel = FuelLevel -1 + IncreaseFuel;
-    FrameDelay = DelayFramesInit;
+    S.FuelLevel = S.FuelLevel -1 + IncreaseFuel;
+    S.FrameDelay = DelayFramesInit;
     myOLED.display();
   }
 
@@ -371,16 +346,15 @@ namespace SlalomGame {
   }
 
 	void ColissionDetected() {
-    colissionsCount++;
     DisplayInitTrack(SH110X_BLACK);
     ResetRaceArray();
     DisplayInitTrack(SH110X_WHITE);
     displayPoints();
     EraseCarFromDisplay();
-    myOLED.drawBitmap(sprite_x[4][car_x-1], sprite_y[4], Wrak, f1_width, f1_height, SH110X_WHITE);
+    myOLED.drawBitmap(sprite_x[4][S.car_x-1], sprite_y[4], Wrak, f1_width, f1_height, SH110X_WHITE);
     myOLED.display();
     delay(400);
-    myOLED.drawBitmap(sprite_x[4][car_x-1], sprite_y[4], Wrak, f1_width, f1_height, SH110X_BLACK);
+    myOLED.drawBitmap(sprite_x[4][S.car_x-1], sprite_y[4], Wrak, f1_width, f1_height, SH110X_BLACK);
 
   }
 
@@ -388,8 +362,8 @@ namespace SlalomGame {
     myOLED.setTextSize(2);
     myOLED.setTextColor(SH110X_WHITE); 
     myOLED.clearDisplay();
-    if (Score > SlalomSesionScore) {
-      SlalomSesionScore = Score;
+    if (Score > S.SesionScore) {
+      S.SesionScore = Score;
     }
     int Slalom_highScore;
     EEPROM.get(Game_SlalomRecord, Slalom_highScore);
@@ -397,7 +371,7 @@ namespace SlalomGame {
       EEPROM.put(Game_SlalomRecord, Score);
       EEPROM.commit();
     }
-    if (FuelLevel == 0) {
+    if (S.FuelLevel == 0) {
       myOLED.setCursor(10,0);
       myOLED.print("No fuel!");
     }
@@ -408,7 +382,7 @@ namespace SlalomGame {
     myOLED.print(Score);
     myOLED.setCursor(1,34);
     myOLED.print("Sesion best:  ");
-    myOLED.print(SlalomSesionScore);
+    myOLED.print(S.SesionScore);
     myOLED.setCursor(1,46);
     myOLED.print("All time best: ");
     EEPROM.get(Game_SlalomRecord, Slalom_highScore);
@@ -423,38 +397,31 @@ namespace SlalomGame {
   }
 
   void CalculateGameSpeedAndLevel() {
-    if (Score >= 20) FrameDelay = 400;
-    if (Score >= 30) FrameDelay = 380;
-    if (Score >= 35) GameLevel = 1;
-    if (Score >= 40) FrameDelay = 330;
-    if (Score >= 60) FrameDelay = 300;
-    if (Score >= 80) FrameDelay = 280;
-    if (Score >= 100) FrameDelay = 270;
-    if (Score >= 110) GameLevel = 2;
-    if (Score >= 120) FrameDelay = 250;
-    if (Score >= 130) FrameDelay = 230;
-    if (Score >= 140) FrameDelay = 210;
-    if (Score >= 150) FrameDelay = 200;
+    for (const SpeedStep& step : SpeedTable) {
+      if (Score >= step.scoreThreshold) S.FrameDelay = step.frameDelay;
+    }
+    if (Score >= SlalomLevel1Score) S.GameLevel = 1;
+    if (Score >= SlalomLevel2Score) S.GameLevel = 2;
   }
 
   void checkIfGameOver() {
-    if (LivesLeft == 0 || FuelLevel == 0) GameOverSlalom=true;
-    if (Score - OldScoreForLivesAdding > 40) {
-      LivesLeftDisplay(LivesLeft, SH110X_BLACK);
-      LivesLeft++;
-      LivesLeftDisplay(LivesLeft, SH110X_WHITE);
+    if (S.LivesLeft == 0 || S.FuelLevel == 0) S.GameOver=true;
+    if (Score - S.OldScoreForLivesAdding > 40) {
+      LivesLeftDisplay(S.LivesLeft, SH110X_BLACK);
+      S.LivesLeft++;
+      LivesLeftDisplay(S.LivesLeft, SH110X_WHITE);
       for (int i=1; i<4; i++){
         if (SoundEnabled) MyTune(TON_ODLICZANIE_FREQ+10*i, 30);
         delay(20);
       }
-      OldScoreForLivesAdding = Score;
+      S.OldScoreForLivesAdding = Score;
     }
   }
 
   void AddFuelStation() {
     if (Sprites_Array[0][3] == CLEAN && 
         Sprites_Array[1][3] == CLEAN && 
-        FuelLevel < 70 &&
+        S.FuelLevel < 70 &&
         Sprites_Array[1][3] != FUEL && 
         Sprites_Array[2][3] != FUEL && 
         Sprites_Array[3][3] != FUEL) {
@@ -505,7 +472,7 @@ void WelcomeSlalomScreen() {
 void Game_Slalom() {
 
   while(1==1) {  
-    GameOverSlalom = false;
+    S.GameOver = false;
 
     WelcomeSlalomScreen();
     myOLED.clearDisplay();
@@ -514,28 +481,27 @@ void Game_Slalom() {
 
     myOLED.display();
 
-    while (!GameOverSlalom){
+    while (!S.GameOver){
       bool carMoved = false;
       carMoved = CheckButtonsSlalom();
  
       if (CheckIfNextFrame()) {
         RedrawScreen();
         displayPoints();
-        DisplayCar(car_x);
+        DisplayCar(S.car_x);
         CheckIfColissionHappen();
         CleanRow5();
         AddFuelStation();
-        //AddPlamaOleju();
         myOLED.display();
       } else if (carMoved) {
         // Auto się poruszyło, ale nie ma nowej klatki - tylko przemaluj auto
-        DisplayCar(car_x);
+        DisplayCar(S.car_x);
         myOLED.display(); // Natychmiast odśwież ekran po ruchu
       }
       CalculateGameSpeedAndLevel();
       checkIfGameOver();
     }
-    if (GameOverSlalom) GameOverSlalomDisplay();
+    if (S.GameOver) GameOverSlalomDisplay();
     while (!IsPressed(DownRight));
   }
 }
@@ -545,27 +511,27 @@ bool CheckButtonsSlalom(){
   bool carMoved = false;
 
   btn = ReadButton(nullptr, Timer1Sec);
-  if (!ButtonPressed) {
+  if (!S.ButtonPressed) {
     if (btn == UpRight){
-      ButtonPressed = true;
+      S.ButtonPressed = true;
       Pause();
       return false;
     }
     if (btn == DownLeft) {
-      ButtonPressed = true;
-      if (car_x > 1) {
-        car_x--;
+      S.ButtonPressed = true;
+      if (S.car_x > 1) {
+        S.car_x--;
         carMoved = true;
       }
     } else if (btn == DownRight) {
-        ButtonPressed = true;
-      if (car_x < 4) {
-        car_x++;
+        S.ButtonPressed = true;
+      if (S.car_x < 4) {
+        S.car_x++;
         carMoved = true;
       }
     }
   } else {
-    if (btn == NONE) ButtonPressed = false;
+    if (btn == NONE) S.ButtonPressed = false;
   }
   return carMoved;
 }

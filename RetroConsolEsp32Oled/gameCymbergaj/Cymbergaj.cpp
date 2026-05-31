@@ -60,20 +60,19 @@ namespace CymbergajGame {
   }
 
   void PadlePosAiUpdate(gameStruct& CymGame, cymBallStruct& Ball,  cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer) {
-    if (millis()-CymGame.aiPadlePosPrevUpdateTime > (CymGame.aiPadlePosUpdateRate)) {
-      CymGame.aiPadlePosPrevUpdateTime  = millis();
-      uint8_t deltaYai = 3*CymGame.aiLevel;
-      uint8_t LossFactor = random(0,6/CymGame.aiLevel);
-      if (CymGame.playersNo != 2) {
-        if (RightPlayer.y > Ball.y) RightPlayer.y = RightPlayer.y - deltaYai - LossFactor;
-        if (RightPlayer.y < Ball.y) RightPlayer.y = RightPlayer.y + deltaYai + LossFactor;
-      }
-      if (CymGame.playersNo == 0) {
-        if (LeftPlayer.y > Ball.y) LeftPlayer.y = LeftPlayer.y - deltaYai - LossFactor;
-        if (LeftPlayer.y < Ball.y) LeftPlayer.y = LeftPlayer.y + deltaYai + LossFactor;
-      }
-      if (CymGame.playersNo > 0) CymGame.updateScreen = true;
+    if (!TimerElapsed(CymGame.aiPadlePosPrevUpdateTime, CymGame.aiPadlePosUpdateRate)) return;
+
+    uint8_t deltaYai = 3*CymGame.aiLevel;
+    uint8_t LossFactor = random(0,6/CymGame.aiLevel);
+    if (CymGame.playersNo != 2) {
+      if (RightPlayer.y > Ball.y) RightPlayer.y = RightPlayer.y - deltaYai - LossFactor;
+      if (RightPlayer.y < Ball.y) RightPlayer.y = RightPlayer.y + deltaYai + LossFactor;
     }
+    if (CymGame.playersNo == 0) {
+      if (LeftPlayer.y > Ball.y) LeftPlayer.y = LeftPlayer.y - deltaYai - LossFactor;
+      if (LeftPlayer.y < Ball.y) LeftPlayer.y = LeftPlayer.y + deltaYai + LossFactor;
+    }
+    if (CymGame.playersNo > 0) CymGame.updateScreen = true;
   }
 
   void PadlePosPlayerUpdate(gameStruct& CymGame, cymPlayerStruct& LeftPlayer, cymPlayerStruct& RightPlayer) {
@@ -90,7 +89,7 @@ namespace CymbergajGame {
           RightPlayer.y = RightPlayer.y + CymGame.padleDeltaMoveY;
           if (RightPlayer.y > PadleMaxY) RightPlayer.y = PadleMaxY;
         }
- 
+        // fall-through: przy 2 graczach obsluz tez lewa paletke ponizej
       case 1:
        if (IsPressed(UpLeft)) {
           LeftPlayer.y = LeftPlayer.y-CymGame.padleDeltaMoveY;
@@ -101,6 +100,7 @@ namespace CymbergajGame {
           if (LeftPlayer.y > PadleMaxY ) LeftPlayer.y = PadleMaxY;
         }
         if (!IsPressed(NONE)) CymGame.updateScreen = true;
+        // fall-through: case 0 i tak tylko wychodzi (AI sterowane gdzie indziej)
       case 0:
       default:
         return;
@@ -302,11 +302,7 @@ namespace CymbergajGame {
   }
 
   bool ItsTimeForBallPosUpdate(cymBallStruct& Ball) {
-    if (millis()-Ball.prevUpdateTime > (Ball.updateRate)) {
-      Ball.prevUpdateTime  = millis();
-      return true;
-    }
-    return false;
+    return TimerElapsed(Ball.prevUpdateTime, Ball.updateRate);
   }
 
   void UpdateBallXpos(cymBallStruct& Ball) {
@@ -347,11 +343,7 @@ namespace CymbergajGame {
 
     if (CymGame.ballSpeed == Szybko) FinalUpdateRate = CymGame.playerPadlePosUpdateRate / 2;
 
-    if (millis()-CymGame.playerPadlePosPrevUpdateTime > (FinalUpdateRate)) {
-        CymGame.playerPadlePosPrevUpdateTime  = millis();
-        return true;
-    }
-    return false;
+    return TimerElapsed(CymGame.playerPadlePosPrevUpdateTime, FinalUpdateRate);
   }
 
   void CheckIfBallHitBand(cymBallStruct& Ball) {

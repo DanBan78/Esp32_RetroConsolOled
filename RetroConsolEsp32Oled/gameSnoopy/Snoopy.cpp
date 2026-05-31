@@ -148,11 +148,7 @@ void DrawBalls(BallLineStr& BallLine, uint16_t color){
 }
 
 bool ItsTimeToMoveBall(snoopyStr& Snoopy) {
-  if (millis()- Snoopy.prevUpdateTime > (Snoopy.frameUpdateRate)) {
-    Snoopy.prevUpdateTime  = millis();
-    return true;
-  }
-  return false;
+  return TimerElapsed(Snoopy.prevUpdateTime, Snoopy.frameUpdateRate);
 }
 
 void SnoopyInit(snoopyStr& Snoopy, BallLineStr allBallLines[4]) {

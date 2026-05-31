@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/Github/ESP_console_retro/**)",
+      "PowerShell($cli = Get-Command arduino-cli -ErrorAction SilentlyContinue; if \\($cli\\) { \"arduino-cli: $\\($cli.Source\\)\"; arduino-cli version } else { \"arduino-cli NOT in PATH\" })",
+      "Bash(sed -i '41,304{/^$/d; /^\\\\/\\\\//d}' gameStriker/Striker.cpp)",
+      "Bash(sed -n '36,48p' gameStriker/Striker.cpp)",
+      "Bash(grep -rn --include=*.cpp --include=*.ino \"^\\\\s*//.*[a-zA-Z_]*\\(.*\\);\" .)",
+      "Bash(grep -rn --include=*.cpp --include=*.ino --include=*.h \"^\\\\s*//.*\\\\w\\(.*\\);\" . --exclude-dir=build)",
+      "Bash(xargs wc -l)",
+      "Bash(grep -n '\\\\b__TRACKED_VAR__\\\\b' gameSlalom/Slalom.cpp)",
+      "Bash(grep -v \"^[0-9]*:.*//\")",
+      "Bash(git rev-parse *)",
+      "Bash(git add *)",
+      "Bash(git diff *)",
+      "Read(//tmp/**)",
+      "Bash(git commit -q -m '@ *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

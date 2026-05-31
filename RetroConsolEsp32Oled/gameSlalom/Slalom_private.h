@@ -9,6 +9,35 @@
 	#define LivesInit 3
 	#define DelayFramesInit 600
     #define IncreaseFuel 30
+
+    // Caly stan rozgrywki Slaloma w jednej strukturze.
+    struct SlalomState {
+      int LivesLeft;
+      int GameLevel = 0;
+      int FuelLevel = FuelInit;
+      bool LineSwitch = false;
+      bool GameOver = false;
+      bool ButtonPressed = false;
+      unsigned long LastTime = 0;
+      unsigned long LastTime2 = 0;
+      unsigned long LastFuelBlinkTime = 0;
+      bool FuelBlinkState = false;
+      int OldScoreForLivesAdding = 0;
+      int FrameDelay = DelayFramesInit; // odstep w ms pomiedzy klatkami
+      int car_x = 0;                     // pozycja auta (kolumna 1..4)
+      int SesionScore = 0;
+    };
+
+    // Tabela strojenia predkosci: od jakiego Score obowiazuje dany FrameDelay (ms).
+    // Posortowana rosnaco wg progu; ostatni pasujacy wpis wygrywa.
+    struct SpeedStep { int scoreThreshold; int frameDelay; };
+    static const SpeedStep SpeedTable[] = {
+      {20, 400}, {30, 380}, {40, 330}, {60, 300}, {80, 280},
+      {100, 270}, {120, 250}, {130, 230}, {140, 210}, {150, 200}
+    };
+    // Progi awansu poziomu trudnosci (Score -> GameLevel).
+    #define SlalomLevel1Score 35
+    #define SlalomLevel2Score 110
 	#define f1_width 36
 	#define f1_height 22
 

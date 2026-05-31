@@ -23,10 +23,10 @@ void Game_HackMe() {
       GameRestart(HackMeGame);
       while(true) {
         DisplaySoundInfo(88, 52, SoundEnabled);
-        if (FirstDigitIsWrong(HackMeGame,Timer1Sec)) break;
-        if (SecondDigitIsWrong(HackMeGame,Timer1Sec)) break;
-        if (ThirdDigitIsWrong(HackMeGame,Timer1Sec)) break;
-        if (FourthDigitIsWrong(HackMeGame,Timer1Sec)) break;
+        if (DigitIsWrong(HackMeGame, Timer1Sec, AXIS_COL, false)) break; // 1. cyfra: kolumna
+        if (DigitIsWrong(HackMeGame, Timer1Sec, AXIS_ROW, true))  break; // 2. cyfra: wiersz
+        if (DigitIsWrong(HackMeGame, Timer1Sec, AXIS_COL, true))  break; // 3. cyfra: kolumna
+        if (DigitIsWrong(HackMeGame, Timer1Sec, AXIS_ROW, true))  break; // 4. cyfra: wiersz
         CodeResolved();   
         HackMeGame.newGame = true;
         break;
@@ -214,11 +214,18 @@ void MixedCodeDisplay (gameStruct& HackMeGame){
   }
 }
 
-bool FirstDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
-  int prevCol = HackMeGame.SelectedCol;
+// Wspólna obsługa wyboru jednej cyfry kodu.
+// axis == AXIS_COL -> ruch po kolumnach (SelectedCol, podswietlenie SelectCol_x),
+// axis == AXIS_ROW -> ruch po wierszach (SelectedRow, podswietlenie SelectRow_y).
+// requireMove == true -> zatwierdzenie (DownRight) bez zmiany pozycji jest ignorowane.
+// Zwraca true gdy cyfra bledna lub czas minal, false gdy poprawna.
+bool DigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec, DigitAxis axis, bool requireMove) {
+  uint8_t& pos = (axis == AXIS_COL) ? HackMeGame.SelectedCol : HackMeGame.SelectedRow;
+  int prevPos = pos;
   btPressedCode button = NONE;
 
-  while(!Timer1Sec.timeOut) {
+  while (!Timer1Sec.timeOut) {
+    int posAtLoopStart = pos;
     button = ReadButton(Timer_Interrupt, Timer1Sec);
     while (button == NONE) {
       button = ReadButton(Timer_Interrupt, Timer1Sec);
@@ -226,143 +233,22 @@ bool FirstDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
     }
     switch (button) {
       case UpLeft:
-        if (HackMeGame.SelectedCol == 0) break;
-        HackMeGame.SelectedCol--;
+        if (pos == 0) break;
+        pos--;
         break;
       case DownLeft:
-        if (HackMeGame.SelectedCol == ArrayMaxRowColIndex) break;
-        HackMeGame.SelectedCol++;
+        if (pos == ArrayMaxRowColIndex) break;
+        pos++;
         break;
       case DownRight:
-        if (SelectedDigitIsWrong(HackMeGame)) {
-          return true;
-        } else return false;
-        break;
+        if (requireMove && pos == prevPos) continue; // ignoruj wybór tej samej pozycji
+        return SelectedDigitIsWrong(HackMeGame);
       default:
         break;
     }
-    if (prevCol != HackMeGame.SelectedCol) {
-      SelectCol_x(HackMeGame.SelectedCol, prevCol);
-      prevCol = HackMeGame.SelectedCol;
-      myOLED.display();
-    }
-    WaitForButtonRelease();
-  }
-  return true;
-}
-
-bool SecondDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
-  int prevRow = HackMeGame.SelectedRow;
-  int selectedRow = HackMeGame.SelectedRow;
-  btPressedCode button = NONE;
-
-  while(!Timer1Sec.timeOut) {
-    button = ReadButton(Timer_Interrupt, Timer1Sec);
-    while (button == NONE) {
-      button = ReadButton(Timer_Interrupt, Timer1Sec);
-      if (TimeOutBombExplode(Timer1Sec)) return true;
-    }
-    switch (button){
-      case DownLeft:
-        if (HackMeGame.SelectedRow == ArrayMaxRowColIndex) break;
-        HackMeGame.SelectedRow++;
-        break;
-      case UpLeft:
-        if (HackMeGame.SelectedRow == 0) break;
-        HackMeGame.SelectedRow--;
-        break;
-      case DownRight:
-        if (HackMeGame.SelectedRow == prevRow)  continue; // ignoruj próbę wyboru tej samej pozycji
-        if (SelectedDigitIsWrong(HackMeGame)) {
-          return true;
-        } else return false;
-        break;
-      default:
-        break;
-    }
-    if (HackMeGame.SelectedRow != selectedRow) {
-      SelectRow_y(HackMeGame.SelectedRow, selectedRow);
-      selectedRow = HackMeGame.SelectedRow;
-      myOLED.display();
-    }
-    WaitForButtonRelease();
-  }
-  return true;
-}
-
-bool ThirdDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
-  int prevCol = HackMeGame.SelectedCol;
-  int selectedCol = HackMeGame.SelectedCol;
-  btPressedCode button = NONE;
-
-  while(!Timer1Sec.timeOut) {
-    selectedCol = HackMeGame.SelectedCol;
-    button = ReadButton(Timer_Interrupt, Timer1Sec);
-    while (button == NONE) {
-      button = ReadButton(Timer_Interrupt, Timer1Sec);
-      if (TimeOutBombExplode(Timer1Sec)) return true;
-    }
-    switch (button){
-      case UpLeft:
-        if (HackMeGame.SelectedCol == 0) break;
-        HackMeGame.SelectedCol--;
-        break;
-      case DownLeft:
-        if (HackMeGame.SelectedCol == ArrayMaxRowColIndex) break;
-        HackMeGame.SelectedCol++;
-        break;
-      case DownRight:
-        if (HackMeGame.SelectedCol == prevCol) continue; // ignoruj próbę wyboru tej samej pozycji
-        if (SelectedDigitIsWrong(HackMeGame)) {
-          return true;
-        } else return false;
-        break;
-      default:
-        break;
-    }
-    if (selectedCol != HackMeGame.SelectedCol) {
-      SelectCol_x(HackMeGame.SelectedCol, selectedCol);
-      selectedCol = HackMeGame.SelectedCol;
-      myOLED.display();
-    }
-    WaitForButtonRelease();
-  }
-  return true;
-}
-
-bool FourthDigitIsWrong(gameStruct& HackMeGame, timerStruct& Timer1Sec) {
-  int prevRow = HackMeGame.SelectedRow;
-  int selectedRow = HackMeGame.SelectedRow;
-  btPressedCode button = NONE;
-  
-  while(!Timer1Sec.timeOut) {
-    selectedRow = HackMeGame.SelectedRow;
-    button = ReadButton(Timer_Interrupt, Timer1Sec);
-    while (button == NONE) {
-      button = ReadButton(Timer_Interrupt, Timer1Sec);
-      if (TimeOutBombExplode(Timer1Sec)) return true;
-    }
-    switch (button){
-      case UpLeft:
-        if (HackMeGame.SelectedRow == 0) break;
-        HackMeGame.SelectedRow--;
-        break;
-      case DownLeft:
-        if (HackMeGame.SelectedRow == ArrayMaxRowColIndex) break;
-        HackMeGame.SelectedRow++;
-        break;
-      case DownRight:
-        if (HackMeGame.SelectedRow == prevRow) continue; // ignoruj próbę wyboru tej samej pozycji
-        if (SelectedDigitIsWrong(HackMeGame)) {
-          return true;
-        } else return false;
-        break;
-      default:
-        break;
-    }
-    if (HackMeGame.SelectedRow != selectedRow) {
-      SelectRow_y(HackMeGame.SelectedRow, selectedRow);
-      selectedRow = HackMeGame.SelectedRow;
+    if (pos != posAtLoopStart) {
+      if (axis == AXIS_COL) SelectCol_x(pos, posAtLoopStart);
+      else                  SelectRow_y(pos, posAtLoopStart);
       myOLED.display();
     }
     WaitForButtonRelease();
