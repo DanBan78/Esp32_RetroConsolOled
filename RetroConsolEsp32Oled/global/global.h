@@ -45,6 +45,7 @@
   #define Game_SnoopyRecord 16
   #define Game_SpaceShooterRecord 20
   #define Game_StrikerRecord 24
+  #define Game_SnakeRecord 28
 
 
   enum btPressedCode { UpLeft, DownRight, NONE, UpRight, DownLeft, ALL_BTN };
@@ -76,6 +77,7 @@
   extern const GameInfo GameInfo_Slalom;
   extern const GameInfo GameInfo_HackMe;
   extern const GameInfo GameInfo_Cymbergaj;
+  extern const GameInfo GameInfo_Snake;
 
   #define BUZZER_PIN 2
   #define BUZZER_CHANNEL 0

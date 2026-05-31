@@ -10,6 +10,7 @@ const GameInfo* allGames[] = {
     &GameInfo_Slalom,  
     &GameInfo_HackMe,
     &GameInfo_Cymbergaj,
+    &GameInfo_Snake,
     &HelpInfo,
   };
 
