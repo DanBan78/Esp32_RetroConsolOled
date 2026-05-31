@@ -247,7 +247,7 @@ void CheckIfBirdColision(dGameStr& DinoGame, jumpStr& Dino, birdStr& Bird, const
       noTone(BUZZER_PIN);
     } else delay(DELAY50MS);
   }
-  if ((Bird.colission) && ((Bird.y < 64) || (Bird.x < -30))) {
+  if ((Bird.colission) && ((Bird.y > 64) || (Bird.x < -30))) {
     Bird.colission = false;
     Bird.x = GameConst.new_obst_x_init + random(0,40);
     Bird.y = GameConst.Bird_initY + random(-5,6);
@@ -255,11 +255,10 @@ void CheckIfBirdColision(dGameStr& DinoGame, jumpStr& Dino, birdStr& Bird, const
 }
 
 void HandleDinoJump(dGameStr& DinoGame, jumpStr& Dino, const GameConstStr& GameConst) {
-  Serial.println("HandleDinoJump "+String(Dino.jump)+" height: "+String(GameConst.jumper_jumpHeight / Dino.jumpType));
   switch (Dino.jump) {
     case 1: // going up
       Dino.jumpHangTime = 0;
-      if (SoundEnabled && !DinoGame.soundDone) void JumpSound();
+      if (SoundEnabled && !DinoGame.soundDone) JumpSound(DinoGame);
       Dino.y -= 5;
       if (Dino.y < (GameConst.jumper_baseY - GameConst.jumper_jumpHeight / Dino.jumpType)) {
         Dino.y = (GameConst.jumper_baseY - GameConst.jumper_jumpHeight / Dino.jumpType);
@@ -285,7 +284,6 @@ void HandleDinoJump(dGameStr& DinoGame, jumpStr& Dino, const GameConstStr& GameC
     default:
       break;
   }
-  //TurboSpeed(DinoGame,false, &Dino.y);
 }
 
 

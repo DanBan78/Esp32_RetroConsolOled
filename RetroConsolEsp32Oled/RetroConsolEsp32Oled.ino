@@ -45,7 +45,6 @@ void setup() {
     wakeFromSleep();
   }  
   lastButtonPressTime = millis();
-  //DisplayHighscores();
 }
 //####################################################################################
 void loop() {

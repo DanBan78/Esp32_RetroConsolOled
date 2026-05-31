@@ -3,39 +3,7 @@
 
 	extern const GameInfo GameInfo_Striker;
 
-
-	// typedef struct BallLineStr {
-	// 	uint8_t position = 0;
-	// 	orientation direction = sWaiting;
-	// };
-
-	// typedef struct strikerStr {
-	// 	orientation direction = sWaiting;
-	//     uint8_t lives = 3;
-	// 	uint16_t sesionScore = 0;
-	// 	unsigned long prevUpdateTime = 0;
-	// 	unsigned long initFrameUpdateRate = 300;
-	// 	unsigned long frameUpdateRate = 500;
-	// };
-
-	//void Game_Striker();
 namespace StrikerGame {
-	enum orientation { sLeftUp = 0, sLeftDown = 1, sRightUp = 2, sRightDown = 3, sResting = 4, sWaiting = 5 };
-
-	#define Ball_DIMENSION 3
-	// bool ItsTimeToMoveBall(strikerStr& Striker);
-	// void StrikerInit(strikerStr& Striker, BallLineStr allBallLines[4]);
-    // void DrawBalls(BallLineStr& BallLine, uint16_t color);
-	// void CheckIfBallDropped(strikerStr& Striker, BallLineStr allBallLines[4]);
-	// void DisplayGameOverStriker(strikerStr& Striker);
-	// void StrikerDisplayScore(strikerStr& Striker);
-	// void DrawStriker(orientation Pos, uint16_t color);
-	// void CheckIfSnopyMoved(strikerStr& Striker);
-	// void DisplayBrokenBall(strikerStr& Striker, orientation pos);
-    // void DisplayBallsOnScreen(BallLineStr allBallLines[4]);
-	// bool NewBallIsRequired(strikerStr& Striker, BallLineStr allBallLines[4]);
-	// void AddFirstBall(BallLineStr allBallLines[4]);
-	// void ClearBallLines(BallLineStr allBallLines[4]);
 	void WelcomeStrikerScreen();
 }
 // 'LEWY', 128x85px
