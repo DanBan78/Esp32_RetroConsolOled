@@ -41,8 +41,9 @@
   #define Game_CymbergajRecord 12
   #define Game_SnoopyRecord 16
   #define Game_SpaceShooterRecord 20
-  #define Game_StrikerRecord 24
+  #define Game_StrikerRecord 24   // zarezerwowany (gra usunieta)
   #define Game_SnakeRecord 28
+  #define Game_StatkiRecord 32
 
 
   enum btPressedCode { UpLeft, DownRight, NONE, UpRight, DownLeft, ALL_BTN };
@@ -66,7 +67,7 @@
 
   // GameInfo deklaracje - muszą być po definicji struct GameInfo
   extern const GameInfo* allGames[];
-  extern const GameInfo GameInfo_Striker;
+  extern const GameInfo GameInfo_Statki;
 
   extern const GameInfo HelpInfo;
   extern const GameInfo GameInfo_Dino;

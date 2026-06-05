@@ -4,8 +4,8 @@
 #include "gameDino/Dino.cpp"
 #include "gameHackMe/HackMe.cpp"
 #include "gameSnoopy/Snoopy.cpp"
-#include "gameStriker/Striker.cpp"
 #include "gameSnake/Snake.cpp"
+#include "gameStatki/Statki.cpp"
 
 
 Adafruit_SH1106G myOLED = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -170,8 +170,8 @@ void CheckIfResetHighscores(){
     EEPROM.put(Game_SlalomRecord, reset);
     EEPROM.put(Game_SnoopyRecord, reset);
     EEPROM.put(Game_CymbergajRecord, reset);
-    EEPROM.put(Game_StrikerRecord, reset);
     EEPROM.put(Game_SnakeRecord, reset);
+    EEPROM.put(Game_StatkiRecord, reset);
 
     EEPROM.commit();
   }
